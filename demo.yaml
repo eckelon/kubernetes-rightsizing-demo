@@ -1,0 +1,170 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mem-example
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cpu-example
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aurorapeak-deployment
+  namespace: mem-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aurorapeak
+  template:
+    metadata:
+      labels:
+        app: aurorapeak
+    spec:
+      containers:
+      - name: aurorapeak-container
+        image: polinux/stress
+        resources:
+          requests:
+            memory: "100Mi"
+          limits:
+            memory: "200Mi"
+        command: ["stress"]
+        args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: galaxyglader-deployment
+  namespace: cpu-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: galaxyglader
+  template:
+    metadata:
+      labels:
+        app: galaxyglader
+    spec:
+      containers:
+      - name: galaxyglader-container
+        image: polinux/stress
+        resources:
+          requests:
+            cpu: "2"
+          limits:
+            cpu: "3"
+        command: ["stress"]
+        args: ["--cpu", "1", "--timeout", "60s"]
+
+
+---
+# memory oversized
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nebulanest-deployment
+  namespace: mem-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nebulanest
+  template:
+    metadata:
+      labels:
+        app: nebulanest
+    spec:
+      containers:
+      - name: nebulanest-container
+        image: polinux/stress
+        resources:
+          requests:
+            memory: "800Mi"
+          limits:
+            memory: "1024Mi"
+        command: ["stress"]
+        args: ["--vm", "1", "--vm-bytes", "100M", "--vm-hang", "1"]
+---
+# less requests than avg usage
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orbitoasis-deployment
+  namespace: cpu-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: orbitoasis
+  template:
+    metadata:
+      labels:
+        app: orbitoasis
+    spec:
+      containers:
+      - name: orbitoasis-container
+        image: polinux/stress
+        resources:
+          requests:
+            memory: "100Mi"
+          limits:
+            memory: "200Mi"
+        command: ["stress"]
+        args: 
+          - "--cpu"
+          - "1"
+          - "--vm"
+          - "1"
+          - "--vm-bytes"
+          - "150M"
+          - "--vm-hang"
+          - "1"
+---
+# no limits or requests
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quantumquartz-deployment
+  namespace: mem-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quantumquartz
+  template:
+    metadata:
+      labels:
+        app: quantumquartz
+    spec:
+      containers:
+      - name: quantumquartz-container
+        image: polinux/stress
+        command: ["stress"]
+        args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+---
+# no limits or requests
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meteormeadow-deployment
+  namespace: cpu-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: meteormeadow
+  template:
+    metadata:
+      labels:
+        app: meteormeadow
+    spec:
+      containers:
+      - name: meteormeadow-container
+        image: polinux/stress
+        command: ["stress"]
+        args: ["--cpu", "1", "--timeout", "60s"]
