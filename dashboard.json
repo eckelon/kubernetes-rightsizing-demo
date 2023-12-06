@@ -751,7 +751,7 @@
           "refId": "A"
         }
       ],
-      "title": "Containers without Memory Limits",
+      "title": "Containers without Memory Requests",
       "type": "timeseries"
     },
     {
@@ -1187,6 +1187,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Rightsizing demo",
-  "version": 31,
+  "version": 32,
   "weekStart": ""
 }
