@@ -457,11 +457,12 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (container) (rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", namespace=~\"$namespace\"}[$__rate_interval])\nunless on (container) kube_pod_container_resource_limits{resource=\"cpu\"})",
+          "expr": "count by (namespace)(sum by (namespace,pod,container)(kube_pod_container_info{container!=\"\", namespace=~\"$namespace\"}) unless sum by (namespace,pod,container)(kube_pod_container_resource_limits{resource=\"cpu\", namespace=~\"$namespace\"}))",
+          "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A"
+          "refId": "B"
         }
       ],
       "title": "Containers without CPU Limits",
@@ -552,11 +553,12 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (container) (rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", namespace=~\"$namespace\"}[$__rate_interval])\nunless on (container) kube_pod_container_resource_requests{resource=\"cpu\"})",
+          "expr": "count by (namespace)(sum by (namespace,pod,container)(kube_pod_container_info{container!=\"\", namespace=~\"$namespace\"}) unless sum by (namespace,pod,container)(kube_pod_container_resource_requests{resource=\"cpu\", namespace=~\"$namespace\"}))",
+          "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A"
+          "refId": "B"
         }
       ],
       "title": "Containers without CPU Requests",
@@ -647,7 +649,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (container) (container_memory_usage_bytes{container!=\"POD\",container!=\"\", namespace=~\"$namespace\"}\nunless on (container) kube_pod_container_resource_limits{resource=\"memory\"})",
+          "expr": "count by (namespace)(sum by (namespace,pod,container)(kube_pod_container_info{container!=\"\", namespace=~\"$namespace\"}) unless sum by (namespace,pod,container)(kube_pod_container_resource_limits{resource=\"memory\", namespace=~\"$namespace\"}))",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -742,7 +744,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (container) (container_memory_usage_bytes{container!=\"POD\",container!=\"\", namespace=~\"$namespace\"}\nunless on (container) kube_pod_container_resource_requests{resource=\"memory\"})",
+          "expr": "count by (namespace)(sum by (namespace,pod,container)(kube_pod_container_info{container!=\"\", namespace=~\"$namespace\"}) unless sum by (namespace,pod,container)(kube_pod_container_resource_requests{resource=\"memory\", namespace=~\"$namespace\"}))",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -1143,7 +1145,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
             "mem-example",
             "cpu-example"
@@ -1185,6 +1187,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Rightsizing demo",
-  "version": 27,
+  "version": 31,
   "weekStart": ""
 }
